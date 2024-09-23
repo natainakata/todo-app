@@ -14,7 +14,6 @@ import {
 import "./App.css";
 import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { div } from "framer-motion/client";
 
 interface Task {
   id: number;
