@@ -1,43 +1,37 @@
 import {
   Box,
-  Button,
   ChakraProvider,
   Flex,
   Heading,
-  Input,
-  InputGroup,
-  InputLeftAddon,
   Stack,
   Text,
-  Textarea,
 } from "@chakra-ui/react";
 import "./App.css";
 import { useState } from "react";
-import dayjs, { Dayjs } from "dayjs";
-
-interface Task {
+import { Dayjs } from "dayjs";
+import Form from "./Form";
+interface TaskData {
   id: number;
   title: string;
-  date: Dayjs;
   description: string;
+  date: Dayjs;
 }
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [date, setDate] = useState<Dayjs>(dayjs());
-  const addTasks = (): void => {
-    const newTask: Task = {
+  const [tasks, setTasks] = useState<TaskData[]>([]);
+
+  const addTasks = (data: {
+    title: string;
+    description: string;
+    date: Dayjs;
+  }): void => {
+    const newTask: TaskData = {
       id: tasks.length + 1,
-      title: title || "無題",
-      description: description || "説明なし",
-      date: date,
+      title: data.title || "無題",
+      description: data.description || "説明なし",
+      date: data.date,
     };
     setTasks([...tasks, newTask]);
-    setTitle("");
-    setDate(dayjs);
-    setDescription("");
   };
 
   return (
@@ -53,35 +47,9 @@ function App() {
         >
           <Heading as="h1">TODO APP</Heading>
           <Text mt={1}>TODO管理、します。</Text>
-          <Stack spacing={4} maxW="sm" mt={4} mx="auto">
-            <InputGroup>
-              <InputLeftAddon>タスク名</InputLeftAddon>
-              <Input
-                type="text"
-                bg="#eee"
-                onChange={(e) => setTitle(e.target.value)}
-                value={title}
-              ></Input>
-            </InputGroup>
-            <InputGroup>
-              <InputLeftAddon>期限</InputLeftAddon>
-              <Input
-                type="date"
-                bg="#eee"
-                onChange={(e) => setDate(dayjs(e.target.value))}
-                value={date.format()}
-              ></Input>
-            </InputGroup>
-            <Textarea
-              bg="#eee"
-              placeholder="説明："
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
-            ></Textarea>
 
-            <Button bg="blue" color="#fff" px={4} mx="auto" onClick={addTasks}>
-              登録
-            </Button>
+          <Stack spacing={4} maxW="sm" mt={4} mx="auto">
+            <Form onSubmit={addTasks} />
           </Stack>
         </Box>
         <Box>
@@ -93,7 +61,7 @@ function App() {
                   <Text>{task.title}</Text>
                 </Flex>
                 <Flex align="center" justifyContent="space-between">
-                  <Text>期日:</Text>
+                  <Text>日付:</Text>
                   <Text>{task.date.format("YYYY/MM/DD")}</Text>
                 </Flex>
                 <Box>
